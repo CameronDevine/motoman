@@ -24,8 +24,10 @@ add_service_files(
   DIRECTORY
     srv
   FILES
-    CmdJointTrajectoryEx.srv
-)
+  CmdJointTrajectoryEx.srv
+  ReadSingleIO.srv
+  WriteSingleIO.srv
+  )
 
 generate_messages(
   DEPENDENCIES
