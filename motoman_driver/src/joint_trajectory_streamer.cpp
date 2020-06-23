@@ -396,7 +396,7 @@ void MotomanJointTrajectoryStreamer::streamingThread()
   ROS_INFO("Starting Motoman joint trajectory streamer thread");
   while (ros::ok())
   {
-    ros::Duration(0.005).sleep();
+    //ros::Duration(0.005).sleep();
 
     // automatically re-establish connection, if required
     if (connectRetryCount-- > 0)
@@ -422,7 +422,7 @@ void MotomanJointTrajectoryStreamer::streamingThread()
     switch (this->state_)
     {
     case TransferStates::IDLE:
-      ros::Duration(0.250).sleep();  //  slower loop while waiting for new trajectory
+      //ros::Duration(0.250).sleep();  //  slower loop while waiting for new trajectory
       break;
 
     case TransferStates::STREAMING:
@@ -479,19 +479,22 @@ void MotomanJointTrajectoryStreamer::streamingThread()
       // if no points in queue, streaming complete, set to idle.
       if (this->ptstreaming_queue_.empty())
       {
+        break;
+        /*
         if (this->dt_ptstreaming_points_ < this->ptstreaming_timeout_)
         {
           this->dt_ptstreaming_points_ = ros::Time::now().toSec() - this->time_ptstreaming_last_point_;
-          ros::Duration(0.005).sleep();
+          //ros::Duration(0.005).sleep();
           ROS_DEBUG("Time since last point: %f", this->dt_ptstreaming_points_);
           break;
         }
         else
         {
           ROS_INFO("Point streaming complete,  setting state to IDLE");
-          this->state_ = TransferStates::IDLE;
+          //this->state_ = TransferStates::IDLE;
           break;
         }
+        */
       }
       // if not connected, reconnect.
       if (!this->connection_->isConnected())
