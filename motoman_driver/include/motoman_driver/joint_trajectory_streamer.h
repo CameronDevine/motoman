@@ -183,4 +183,3 @@ protected:
 }  // namespace motoman
 
 #endif  // MOTOMAN_DRIVER_JOINT_TRAJECTORY_STREAMER_H
->>>>>>> cd971e23993e781ee10080b17d4ab1508bffb8f2
