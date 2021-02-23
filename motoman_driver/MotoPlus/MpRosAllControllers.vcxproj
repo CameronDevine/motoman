@@ -113,7 +113,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='YRC1000|Win32'">
     <NMakeBuildCommandLine>mpbuilder.exe -c $(Configuration) -p "$(ProjectDir)\" -n "MotoRosYRC1_" -o build</NMakeBuildCommandLine>
-    <NMakeOutput>MotoRosYRC1_.out</NMakeOutput>
+    <NMakeOutput>$(MP_VS_Install)DevTools\OnlineDownload.exe</NMakeOutput>
     <NMakePreprocessorDefinitions>$(NMakePreprocessorDefinitions);$(Configuration)</NMakePreprocessorDefinitions>
     <NMakeIncludeSearchPath>$(MP_VS_Install)$(Configuration)\inc</NMakeIncludeSearchPath>
     <NMakeReBuildCommandLine>mpbuilder.exe -c $(Configuration) -p "$(ProjectDir)\" -n "MotoRosYRC1_" -o rebuild</NMakeReBuildCommandLine>
@@ -124,7 +124,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='YRC1000u|Win32'">
     <NMakeBuildCommandLine>mpbuilder.exe -c $(Configuration) -p "$(ProjectDir)\" -n "MotoRosYRC1u_" -o build</NMakeBuildCommandLine>
-    <NMakeOutput>MotoRosYRC1u_.out</NMakeOutput>
+    <NMakeOutput>$(MP_VS_Install)DevTools\OnlineDownload.exe</NMakeOutput>
     <NMakePreprocessorDefinitions>$(NMakePreprocessorDefinitions);$(Configuration)</NMakePreprocessorDefinitions>
     <NMakeIncludeSearchPath>$(MP_VS_Install)$(Configuration)\inc</NMakeIncludeSearchPath>
     <NMakeReBuildCommandLine>mpbuilder.exe -c $(Configuration) -p "$(ProjectDir)\" -n "MotoRosYRC1u_" -o rebuild</NMakeReBuildCommandLine>
@@ -170,11 +170,6 @@
     <None Include="ParameterExtraction.mpLib" />
     <None Include="ParameterExtraction.yrcLib" />
     <None Include="ParameterExtraction.yrcmlib" />
-    <None Include="RosSetupValidation.dnLib" />
-    <None Include="RosSetupValidation.fsLib" />
-    <None Include="RosSetupValidation.mpLib" />
-    <None Include="RosSetupValidation.yrcLib" />
-    <None Include="RosSetupValidation.yrcmlib" />
     <None Include="YRC1000CompilerArguments.mps" />
     <None Include="YRC1000LinkerArguments.mps" />
     <None Include="YRC1000uCompilerArguments.mps" />
@@ -197,7 +192,6 @@
     <ClInclude Include="MotoROS.h" />
     <ClInclude Include="ParameterExtraction.h" />
     <ClInclude Include="ParameterTypes.h" />
-    <ClInclude Include="RosSetupValidation.h" />
     <ClInclude Include="SimpleMessage.h" />
     <ClInclude Include="StateServer.h" />
   </ItemGroup>
