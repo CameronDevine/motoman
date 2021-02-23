@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(motoman_driver)
 
+# require C++11
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 # Load catkin and all dependencies required for this package
 find_package(
   catkin
@@ -119,13 +124,27 @@ set_target_properties(motoman_robot_state
 add_executable(motoman_motion_streaming_interface
   src/joint_streaming_node.cpp
   src/joint_trajectory_streamer.cpp
-  src/motion_ctrl.cpp)
+  src/motion_ctrl.cpp
+  src/io_ctrl.cpp)
 target_link_libraries(motoman_motion_streaming_interface
   motoman_simple_message
   motoman_industrial_robot_client
   ${catkin_LIBRARIES})
 set_target_properties(motoman_motion_streaming_interface
   PROPERTIES OUTPUT_NAME motion_streaming_interface
+  PREFIX "")
+
+# I/O relay node
+add_executable(motoman_io_relay
+  src/io_relay_node.cpp
+  src/io_relay.cpp
+  src/io_ctrl.cpp)
+target_link_libraries(motoman_io_relay
+  motoman_simple_message
+  motoman_industrial_robot_client
+  ${catkin_LIBRARIES})
+set_target_properties(motoman_io_relay
+  PROPERTIES OUTPUT_NAME io_relay
   PREFIX "")
 
 
@@ -160,7 +179,8 @@ set_target_properties(motoman_robot_state_bswap
 add_executable(motoman_motion_streaming_interface_bswap
   src/joint_streaming_node.cpp
   src/joint_trajectory_streamer.cpp
-  src/motion_ctrl.cpp)
+  src/motion_ctrl.cpp
+  src/io_ctrl.cpp)
 target_link_libraries(motoman_motion_streaming_interface_bswap
   motoman_simple_message_bswap
   motoman_industrial_robot_client_bswap
@@ -168,6 +188,20 @@ target_link_libraries(motoman_motion_streaming_interface_bswap
 set_target_properties(motoman_motion_streaming_interface_bswap
   PROPERTIES OUTPUT_NAME motion_streaming_interface_bswap
   PREFIX "")
+
+# I/O relay node
+add_executable(motoman_io_relay_bswap
+  src/io_relay_node.cpp
+  src/io_relay.cpp
+  src/io_ctrl.cpp)
+target_link_libraries(motoman_io_relay_bswap
+  motoman_simple_message_bswap
+  motoman_industrial_robot_client_bswap
+  ${catkin_LIBRARIES})
+set_target_properties(motoman_io_relay_bswap
+  PROPERTIES OUTPUT_NAME io_relay_bswap
+  PREFIX "")
+
 
 add_executable(${PROJECT_NAME}_joint_trajectory_action
   src/industrial_robot_client/joint_trajectory_action.cpp
@@ -185,6 +219,8 @@ target_link_libraries(${PROJECT_NAME}_joint_trajectory_action
 # binaries
 install(TARGETS
   ${PROJECT_NAME}_joint_trajectory_action
+  motoman_io_relay
+  motoman_io_relay_bswap
   motoman_motion_streaming_interface
   motoman_motion_streaming_interface_bswap
   motoman_robot_state
@@ -222,5 +258,14 @@ install(DIRECTORY
 
 if(CATKIN_ENABLE_TESTING)
   find_package(roslint REQUIRED)
-  roslint_cpp()
+  # gather files, ignoring MotoPlus (we can't use '--exclude' (not supported
+  # by roslint's version ofcpplint) and we don't want to add a CPPLINT.cfg
+  # file to MotoPlus)
+  file(GLOB_RECURSE files_to_cpplint RELATIVE ${CMAKE_CURRENT_LIST_DIR} "*.cpp" "*.h")
+  string(REGEX REPLACE "MotoPlus/[^;]+;?" "" files_to_cpplint "${files_to_cpplint}")
+  roslint_cpp(${files_to_cpplint})
+  roslint_add_test()
+
+  find_package(roslaunch REQUIRED)
+  roslaunch_add_file_check(tests/roslaunch_test_io_relay.xml)
 endif()
